@@ -13,7 +13,7 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            string pathToKeyFile = builder.Environment.ContentRootPath + "swd63apfc2024-3564063f03d7.json";
+            string pathToKeyFile = builder.Environment.ContentRootPath + "pfc-jmc-2024-27d299dd5030.json";
 
 
             System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", pathToKeyFile );
@@ -56,8 +56,8 @@ namespace Presentation
 
             //uniform bucket =swd63apfc2024ra
             //finegraned bucket = swd63apfc2024ra_fg
-            builder.Services.AddScoped(x => new BucketRepository(project, "swd63apfc2024ra_fg"));
-            builder.Services.AddScoped(x => new PubSubRepository("swd63apfc2024_ra", project));
+            builder.Services.AddScoped(x => new BucketRepository(project, "pfc-jmc-2024-fg"));
+            builder.Services.AddScoped(x => new PubSubRepository("pfc-jmc-2024", project));
 
 
             builder.Services.AddRazorPages();

@@ -7,6 +7,15 @@
 <h1>Create</h1>
 
 <h4>Post</h4>
+
+@{
+    var blogId = "";
+    if (ViewBag.BlogId != null)
+    {
+        blogId = ViewBag.BlogId;
+    }
+}
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -47,6 +56,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="/Posts/Index/@blogId">Back to List</a>
 </div>
 

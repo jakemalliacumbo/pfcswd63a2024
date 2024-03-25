@@ -10,8 +10,6 @@ namespace Presentation.Repositories
         public PostsRepository(string project)
         {
             db = FirestoreDb.Create(project);
-
-
         }
         public async void Add(Post post)
         {

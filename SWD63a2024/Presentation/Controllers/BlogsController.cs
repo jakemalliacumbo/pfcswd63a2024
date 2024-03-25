@@ -50,13 +50,13 @@ namespace Presentation.Controllers
             //}
 
             await bucketRepository.UploadFile(fileAsAStream, newFilename);
-            bucketRepository.GrantPermissionToFile(newFilename, "ryanattard@gmail.com");
+            bucketRepository.GrantPermissionToFile(newFilename, "jmalliacumbo@gmail.com");
 
             //finegrained bucket = https://storage.cloud.google.com/swd63apfc2024ra_fg/laptop.png;
             //uniform bucket = https://storage.googleapis.com/swd63apfc2024ra/{newFilename}
 
 
-            blog.Uri = $"https://storage.cloud.google.com/swd63apfc2024ra_fg/{newFilename}";
+            blog.Uri = $"https://storage.cloud.google.com/pfc-jmc-2024-fg/{newFilename}";
             blog.Author = User.Identity.Name;
             blog.DateCreated = Timestamp.FromDateTime(DateTime.UtcNow);
             blog.DateUpdated = Timestamp.FromDateTime(DateTime.UtcNow);
