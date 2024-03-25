@@ -52,8 +52,8 @@ namespace Presentation.Controllers
             await bucketRepository.UploadFile(fileAsAStream, newFilename);
             bucketRepository.GrantPermissionToFile(newFilename, "jmalliacumbo@gmail.com");
 
-            //finegrained bucket = https://storage.cloud.google.com/swd63apfc2024ra_fg/laptop.png;
-            //uniform bucket = https://storage.googleapis.com/swd63apfc2024ra/{newFilename}
+            //finegrained bucket = https://storage.cloud.google.com/pfc-jmc-2024-fg/laptop.png;
+            //uniform bucket = https://storage.googleapis.com/pfc-jmc-2024/{newFilename}
 
 
             blog.Uri = $"https://storage.cloud.google.com/pfc-jmc-2024-fg/{newFilename}";

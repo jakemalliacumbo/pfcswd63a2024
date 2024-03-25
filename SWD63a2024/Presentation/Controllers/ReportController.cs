@@ -20,7 +20,7 @@ namespace Presentation.Controllers
 
         public async Task< IActionResult> Index()
         {
-           string blogId = _pubSubRepository.PullMessagesSync("swd63apfc2024_ra-sub", true);
+           string blogId = _pubSubRepository.PullMessagesSync("pfc-jmc-2024-sub", true);
             if (string.IsNullOrEmpty(blogId))
             {
                 return Content("None to convert");
