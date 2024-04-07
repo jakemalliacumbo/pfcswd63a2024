@@ -63,7 +63,13 @@
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                 @Html.ActionLink("See Posts", "Index", "Posts", new { id=item.Id  }) |
                 @Html.ActionLink("Delete", "Delete", new {   id=item.Id   }) |
-                    @Html.ActionLink("Create Report", "CreateReport", new {   blogId=item.Id   })
+                @Html.ActionLink("Create Report", "CreateReport", new {   blogId=item.Id   })
+
+                    @{
+                        string fileNameOfPdf = item.Id + ".pdf";
+                    }
+
+                | <a href="https://storage.cloud.google.com/pfc-jmc-2024-fg/@fileNameOfPdf">Download Report</a>
             </td>
         </tr>
 }
