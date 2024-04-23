@@ -1,6 +1,6 @@
-﻿using Google.Cloud.Firestore;
+using Google.Cloud.Firestore;
 
-namespace Presentation.Models
+namespace MyPubSubFunction
 {
     [FirestoreData]
     public class Post
@@ -11,12 +11,10 @@ namespace Presentation.Models
         [FirestoreProperty]
         public string Content { get; set; }
         [FirestoreProperty]
-        public Timestamp DateCreated { get; set; }
+        public Google.Cloud.Firestore.Timestamp DateCreated { get; set; }
         [FirestoreProperty]
-        public Timestamp DateUpdated { get; set; }
-
+        public Google.Cloud.Firestore.Timestamp DateUpdated { get; set; }
         public string BlogId { get; set; }
-
         [FirestoreProperty]
         public string PictureUri { get; set; }
 

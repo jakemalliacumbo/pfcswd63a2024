@@ -15,7 +15,7 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            string pathToKeyFile = builder.Environment.ContentRootPath + "pfc-jmc-2024-27d299dd5030.json";
+            string pathToKeyFile = builder.Environment.ContentRootPath + "pfc-jmc-2024-48052f5bc0a0.json";
 
 
             System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", pathToKeyFile );
@@ -30,6 +30,7 @@ namespace Presentation
              builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                  .AddEntityFrameworkStores<ApplicationDbContext>();
             */
+
             builder.Services.AddControllersWithViews();
            
             builder.Services
@@ -41,10 +42,16 @@ namespace Presentation
                 .AddCookie()
                 .AddGoogle(options =>
                 {
-                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
                 });
 
+            builder.Services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+                options.OnAppendCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                options.OnDeleteCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            });
 
             string project = builder.Configuration["project"];
 
@@ -83,6 +90,7 @@ namespace Presentation
 
             app.UseRouting();
 
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -92,6 +100,20 @@ namespace Presentation
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static void CheckSameSite(HttpContext httpContext, CookieOptions options)
+        {
+            if (options.SameSite == SameSiteMode.None)
+            {
+                var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+                // TODO: Use your User Agent library of choice here.
+                if(true)
+                {
+                    // For .NET Core < 3.1 set SameSite = (SameSiteMode)(-1)
+                    options.SameSite = SameSiteMode.Unspecified;
+                }
+            }
         }
     }
 }
