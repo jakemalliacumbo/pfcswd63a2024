@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Models;
+using Presentation.Repositories;
 using System.Diagnostics;
 
 namespace Presentation.Controllers
@@ -10,13 +11,15 @@ namespace Presentation.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, RedisRepository rr)
         {
+            rr.IncrementCounterInfo();
             _logger = logger;
         }
 
         public IActionResult Index()
         {
+            // A function to delete all dockx from the bucket
             return View();
         }
    

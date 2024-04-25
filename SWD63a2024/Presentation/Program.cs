@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Presentation.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Presentation.Repositories;
 using PdfSharp.Fonts;
 using Presentation.Controllers;
+using Google.Cloud.SecretManager.V1;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Presentation
 {
@@ -32,7 +32,18 @@ namespace Presentation
             */
 
             builder.Services.AddControllersWithViews();
-           
+            
+            string project = builder.Configuration["project"];
+
+            string allKeys = AccessSecretVersion(project, "loginkeys", "2");
+            object myJsonObject = JsonConvert.DeserializeObject(allKeys);
+
+            JObject jsonObject = JObject.Parse(allKeys);
+
+            string clientId = (string)jsonObject["Authentication:Google:ClientId"];
+            string clientSecret = (string)jsonObject["Authentication:Google:ClientSecret"];
+            string redisPassword = (string)jsonObject["redis_password"];
+
             builder.Services
                 .AddAuthentication(options =>
                 {
@@ -42,6 +53,8 @@ namespace Presentation
                 .AddCookie()
                 .AddGoogle(options =>
                 {
+                    options.ClientId = clientId; 
+                    options.ClientSecret = clientSecret ; 
                 });
 
             builder.Services.Configure<CookiePolicyOptions>(options =>
@@ -52,8 +65,6 @@ namespace Presentation
                 options.OnDeleteCookie = cookieContext =>
                     CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
-
-            string project = builder.Configuration["project"];
 
             //these lines will register application services Or services built by the developer with the services collection
             //so the application knows about them when they will requested via constructor/method injection
@@ -68,6 +79,7 @@ namespace Presentation
             builder.Services.AddScoped(x => new BucketRepository(project, "pfc-jmc-2024-fg"));
             builder.Services.AddScoped(x => new PubSubRepository("pfc-jmc-2024", project));
             builder.Services.AddScoped<IFontResolver, FileFontResolver>();
+            builder.Services.AddScoped<RedisRepository>(x => new RedisRepository(redisPassword));  
 
             builder.Services.AddRazorPages();
 
@@ -100,6 +112,22 @@ namespace Presentation
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        public static String AccessSecretVersion(string projectId = "my-project", string secretId = "my-secret", string secretVersionId = "123")
+        {
+            // Create the client.
+            SecretManagerServiceClient client = SecretManagerServiceClient.Create();
+
+            // Build the resource name.
+            SecretVersionName secretVersionName = new SecretVersionName(projectId, secretId, secretVersionId);
+
+            // Call the API.
+            AccessSecretVersionResponse result = client.AccessSecretVersion(secretVersionName);
+
+            // Convert the payload to a string. Payloads are bytes by default.
+            String payload = result.Payload.Data.ToStringUtf8();
+            return payload;
         }
 
         private static void CheckSameSite(HttpContext httpContext, CookieOptions options)

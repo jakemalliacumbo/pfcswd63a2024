@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject Presentation.Repositories.RedisRepository rr;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -40,6 +42,8 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Presentation - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+            &nbsp;Page Acccessed @rr.GetCounterInfo() Times!
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
